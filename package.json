@@ -1,0 +1,16 @@
+{
+  "name": "backend-project-3",
+  "version": "1.0.0",
+  "description": "Learning third time to learn this",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "backend",
+    "chai"
+  ],
+  "author": "divy deshmukh",
+  "license": "ISC"
+}
