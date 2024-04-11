@@ -56,7 +56,7 @@ userSchema.pre("save", async function (next) {
         return next();
     } 
     
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
@@ -93,3 +93,4 @@ userSchema.methods.generateRefreshToken = function(){
 
 export const User = mongoose.model("User", userSchema);
 
+// This User can directly communicate with the database bcoz it is made using mongoose
