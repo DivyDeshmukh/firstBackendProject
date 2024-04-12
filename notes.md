@@ -51,8 +51,38 @@ Storing uploaded files locally before further processing or uploading to another
 
 # To use routes declared in different files we have to use middlewares to attach them with the main file.
 
+# We can send raw data when we do not have to send files but when we want to send files also then do it with form-data
+
+# Error:- (File is not uploading on Cloudinary 721568484595782 CJLWl_V-4iXDPjAIzkuuFSIWt6g dnigolsg6 public\temp\divy.jpg (2).jpg
+<!-- File is not uploading on Cloudinary {
+  message: 'Stale request - reported time is 2024-04-11 13:23:38 +0000 which is more than 1 hour ago',
+  name: 'Error',
+  http_code: 400
+}
+Error: File upload failed
+    at uploadOnCloudinary (file:///I:/Web%20Development/Backend/Backend%20Project%203/src/utils/cloudinary.js:29:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)      
+    at async file:///I:/Web%20Development/Backend/Backend%20Project%203/src/controllers/user.controller.js:50:20)
+
+    Solved:- It was because of incorrect time on the system>>The error message indicates that the request to upload the file to Cloudinary is considered stale because the reported time is more than 1 hour ago. This suggests that the timestamp of the request is incorrect or outdated, causing Cloudinary to reject the request.
+
+To resolve this issue, you can ensure that the timestamp of the request is accurate and within an acceptable range for Cloudinary. Here are a few steps you can take:
+
+1. **Check System Time**: Verify that the system time on your server running the Node.js application is correct. If the system time is incorrect, it can lead to issues with timestamps in requests.
+
+2. **Check Request Time**: Ensure that the timestamp of the request being sent to Cloudinary is accurate. If your application is running on multiple servers or instances, make sure they are synchronized in terms of time.
+
+3. **Cloudinary Configuration**: Check the Cloudinary configuration and settings to ensure that there are no restrictions or limitations related to the timestamp of requests.
+
+4. **Error Handling**: Improve error handling in your code to handle this specific error scenario. You can catch the specific error message indicating a stale request and handle it appropriately, such as retrying the upload with a fresh timestamp.
+
+5. **Retry Mechanism**: Implement a retry mechanism in your code to automatically retry the upload if it fails due to a stale request error. You can set a reasonable delay between retries to avoid flooding Cloudinary with repeated requests.
+
+By addressing these points and ensuring that the timestamp of your requests is accurate and within an acceptable range, you should be able to resolve the issue of stale requests when uploading files to Cloudinary. -->
 
 
 
 
 
+
+# Error: listen EADDRINUSE: address already in use :::8000: This is the main error message indicating that the address (port) is already in use. Just restart the pc.
