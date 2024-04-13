@@ -86,3 +86,15 @@ By addressing these points and ensuring that the timestamp of your requests is a
 
 
 # Error: listen EADDRINUSE: address already in use :::8000: This is the main error message indicating that the address (port) is already in use. Just restart the pc.
+
+# How request is sent from frontend to the server
+<!-- Frontend Interaction: User interacts with the frontend, which collects data.
+Creating an HTTP Request: Frontend constructs an HTTP request with data.
+Sending the Request: Frontend sends the request to the backend server.
+Receiving the Request on the Server: Backend listens for requests on specific routes.
+Parsing the Request Body: Server parses request body, populates req.body.
+Accessing Data in req.body: Server-side code accesses data sent from frontend.
+Processing the Request: Server performs necessary operations (e.g., database interactions).
+Sending a Response: Server sends back an HTTP response to the frontend.
+This summarizes the journey of req.body from frontend to backend and back again in a web application. -->
+

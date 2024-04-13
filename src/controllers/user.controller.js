@@ -251,14 +251,129 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
+const changeCurrentPassword = asyncHandler (async (req, res) => {
+    // this variables will come from frontend form fields
+    const {oldPassword, newPassword} = req.body;
+    const user = await User.findById(req.user?._id);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, "Invalid old Password");
+    }
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave: false});             // bcoz I do not want to run other validations
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, {}, "Password Changed Successfully")
+    )
+});
+
+const getCurrentUser = asyncHandler( async (req, res) => {
+    return (
+        res.status(200)
+        .json(
+            new ApiResponse(200, req.user, "User data sent successfully")
+        )
+    )
+});
+
+const updateAccountDetails = asyncHandler(async(req, res) => {
+    const {fullName, email, } = req.body;
+    // for updating files create a sepereate controller and seperate route
+    if (!fullName || !email) {
+        throw new ApiError(400, "All fields are required")
+    }
+
+    const user = User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                fullName,
+                email: email
+            }
+        },
+        {new: true}         // updated info will come
+    ).select("-password");
+
+    return res.status(200)
+    .json(new ApiResponse(200, user, "Account details updated successfully"));
+
+});
+
+const updateUserAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path;
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar file is missing")
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    if (!avatar.url) {
+        throw new ApiError(400, "Error while uplaoding on avatar");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        {new: true}
+    ).select("-password");
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, user, "Cover image updated successfully")
+    )
+
+});
+
+const updateCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path;
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover Image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uplaoding on coverImage");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {new: true}
+    ).select("-password");
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, user, "Cover image updated successfully")
+    )
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateCoverImage
 }
 
- 
+
 
 // In Mongoose (assuming you're referring to MongoDB with Node.js), User is typically the model defined using mongoose.model() and user is the instance of that model returned from querying the database.
 

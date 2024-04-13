@@ -9,7 +9,7 @@ router.route("/register").post(
     // upload is the name of the method in multer
     upload.fields([
         {
-            name: "avatar",          // the front end should also be same 
+            name: "avatar",          // the front end should also have same field
             maxCount: 1
         },
         {
@@ -22,7 +22,7 @@ router.route("/register").post(
 
 router.route("/login").post(loginUser);
 
-// secured routes
+// secured routes   : check first user is logged in or not with verifyJWT middleware
 // added verifyJWT middleware
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/refresh-token").post(refreshAccessToken)
