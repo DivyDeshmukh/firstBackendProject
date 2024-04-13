@@ -46,8 +46,9 @@ export const verifyJWT = asyncHandler(async(req, _, next) => {
         if (!token) {
             throw new ApiError(401, "Unauthorized request")
         }
-    
-        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        // ok so token coming from client side itself consists of header, payload, and signature but in encrypted form and then we provide secret key so verify method extracts header and payload from token given and then generates a signature using secret key we provided and then finally compares it with the signature present in token 
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        // console.log("DecodedToken: ", decodedToken);
     
         const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
     

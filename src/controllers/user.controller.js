@@ -206,7 +206,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     try {
         const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
     
-        if (incomingRefreshToken) {
+        if (!incomingRefreshToken) {
             throw new ApiError(401, "Unauthorized request");
         }
     
@@ -235,7 +235,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         return response.
         status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
         .json(
             new ApiResponse(
                 200,
@@ -244,7 +244,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
                 },
                 "Access token refreshed"
             )
-        )
+        );
+        
     } catch (error) {
         throw new ApiError(401, error?.message || "Invalid refresh token");
     }
@@ -257,6 +258,7 @@ export {
     refreshAccessToken
 }
 
+ 
 
 // In Mongoose (assuming you're referring to MongoDB with Node.js), User is typically the model defined using mongoose.model() and user is the instance of that model returned from querying the database.
 
