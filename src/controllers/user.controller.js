@@ -184,7 +184,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         req.user._id,
         {
             $unset: {
-                refreshToken: undefined
+                refreshToken: 1
             }
         },
         {
@@ -362,14 +362,14 @@ const updateCoverImage = asyncHandler(async (req, res) => {
     )
 });
 
-const getUserChannelProfile = asyncHandler(async (req, res) => {
-    const {username} = req.params;
+const getUserChannelProfile = asyncHandler(async(req, res) => {
+    const {username} = req.params
 
-    if  (!username?.trim()) {
-        throw new ApiError(400, "username is missing");
+    if (!username?.trim()) {
+        throw new ApiError(400, "username is missing")
     }
 
-    const channel = User.aggregate([
+    const channel = await User.aggregate([
         {
             $match: {
                 username: username?.toLowerCase()
@@ -417,24 +417,22 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 isSubscribed: 1,
                 avatar: 1,
                 coverImage: 1,
-                email: 1,
+                email: 1
+
             }
         }
-    ]);
+    ])
 
-    console.log(channel);
-
-    if (!channel?.length)  {
-        throw new ApiError(
-            404, "channel does not exist"
-        )
+    if (!channel?.length) {
+        throw new ApiError(404, "channel does not exists")
     }
 
-    return res.status(200)
+    return res
+    .status(200)
     .json(
-        new ApiResponse(200, channel[0], "User Channel fetched successfully")
+        new ApiResponse(200, channel[0], "User channel fetched successfully")
     )
-} );
+});
 
 const getWatcHistory = asyncHandler (async (req, res) => {
     const user = await User.aggregate([
